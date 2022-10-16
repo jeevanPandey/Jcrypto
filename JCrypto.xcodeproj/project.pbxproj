@@ -68,7 +68,7 @@
 		DA52EC0628F56E1800050014 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		DA52EC0B28F56EAB00050014 /* CircleButtonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleButtonView.swift; sourceTree = "<group>"; };
 		DA52EC0D28F5995B00050014 /* CircleanimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleanimationView.swift; sourceTree = "<group>"; };
-		DA5F541728FBEC1D00E0B966 /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
+		DA5F541828FBEE0500E0B966 /* File */ = {isa = PBXFileReference; lastKnownFileType = text; path = File; sourceTree = "<group>"; };
 		DA72577328F6649100E4AEE6 /* CoinModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoinModel.swift; sourceTree = "<group>"; };
 		DA72577628F6698500E4AEE6 /* CoinRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinRowView.swift; sourceTree = "<group>"; };
 		DA72577828F66D7F00E4AEE6 /* PreviewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PreviewProvider.swift; sourceTree = "<group>"; };
@@ -107,6 +107,7 @@
 		DA52EBC628F41C1100050014 = {
 			isa = PBXGroup;
 			children = (
+				DA5F541828FBEE0500E0B966 /* File */,
 				DA52EBD128F41C1100050014 /* JCrypto */,
 				DA52EBE228F41C1200050014 /* JCryptoTests */,
 				DA52EBEC28F41C1200050014 /* JCryptoUITests */,
@@ -225,7 +226,6 @@
 			isa = PBXGroup;
 			children = (
 				DA87457D28F7AF0700B5A0AC /* CoinDownloaderService.swift */,
-				DA5F541728FBEC1D00E0B966 /* .gitignore.md */,
 				DA29269428F7F9EE007AF26A /* NetworkManager.swift */,
 				DA29269628F7FA2D007AF26A /* NetworkRequest.swift */,
 				DA29269A28F8034F007AF26A /* AppEndPoints.swift */,

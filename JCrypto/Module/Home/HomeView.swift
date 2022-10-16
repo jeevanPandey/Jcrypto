@@ -17,20 +17,17 @@ struct HomeView: View {
             homeHeader
             HStack {
                 Text("Coin")
-               
                 if(showPortfolio){
                     Text("Holdings")
                         .frame(width: UIScreen.main.bounds.width/2.5,  alignment: .trailing)
                 }
-               
                 Spacer()
                 Text("Price")
-                    
             }
             .foregroundColor(Color.theme.SecondaryTextColor)
             .padding()
             
-            if(showPortfolio) {
+            if(!showPortfolio) {
                 List {
                     ForEach(homeViewModel.portfolioCoins) { eachCoin in
                         CoinRowView(coin: eachCoin, showHoldingColumn: true)

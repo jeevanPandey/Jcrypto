@@ -13,22 +13,41 @@ protocol CoinDataDownloader {
     func downloadCoinData() -> AnyPublisher<[CoinModel], NetworkError>
 }
 
-struct URLPath {
-    static let baseURL = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
-}
 
-class CoinDownloaderService : CoinDataDownloader {
+class CoinDownloaderService : ObservableObject {
     
     var coinCancalble : AnyCancellable?
     private var networkRequest: Requestable
      private var environment: AppEnvironment = .development
+    @Published var liveCoins = [CoinModel]()
+
      
   
    // inject this for testability
      init(networkRequest: Requestable, environment: AppEnvironment) {
          self.networkRequest = networkRequest
          self.environment = environment
+         subscribeToCoinServices()
      }
+    
+    func subscribeToCoinServices() {
+       
+        coinCancalble =  self.downloadCoinData()
+            .sink { (completion) in
+                switch completion {
+                case .failure(let error):
+                    print("oops got an error \(error.localizedDescription)")
+                case .finished:
+                    print("nothing much to do here")
+                }
+            } receiveValue: {[weak self ] (allCoins) in
+                
+                DispatchQueue.main.async {
+                    self?.liveCoins = allCoins
+                }
+               
+            }
+    }
 
      
     func downloadCoinData() -> AnyPublisher<[CoinModel], NetworkError> {

@@ -13,6 +13,7 @@ class HomeViewModel : ObservableObject {
     @Published var liveCoins = [CoinModel]()
    
     private var anyCancalbales : AnyCancellable?
+    let coinService : CoinDownloaderService
     
      init() {
         /* DispatchQueue.main.asyncAfter(deadline: .now()+1) {
@@ -20,12 +21,26 @@ class HomeViewModel : ObservableObject {
              self.liveCoins.append(DeveloperPreview.instance.coin)
          } */
          
-         subscribeToCoinServices()
+         self.coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
+         
+         downloadCoinsData()
     }
     
-    func subscribeToCoinServices() {
+    func downloadCoinsData() {
         
-        let coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
+    anyCancalbales =  self.coinService.$liveCoins.sink { completion in
+                        switch completion {
+                        case .failure(let error):
+                            print("oops got an error \(error.localizedDescription)")
+                        case .finished:
+                            print("nothing much to do here")
+                        }
+                    } receiveValue: { allCoins in
+                        self.liveCoins = allCoins
+                     }
+
+        
+    /*    let coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
         anyCancalbales =  coinService.downloadCoinData()
             .sink { (completion) in
                 switch completion {
@@ -40,12 +55,12 @@ class HomeViewModel : ObservableObject {
                     self?.liveCoins = allCoins
                 }
                
-            }
-            
-        //        coinService.$allCoins.sink { [weak self] allCoins in
-        //            self?.liveCoins = allCoins
-        //        }
-        //        .store(in: &anyCancalbales)
+            } */
         
+        
+        
+       
+        
+            
     }
 }

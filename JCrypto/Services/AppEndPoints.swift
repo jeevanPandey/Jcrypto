@@ -26,6 +26,13 @@ extension AppEnvironment {
             return "https://api.coingecko.com/api/v3/coins/"
         }
     }
+    
+    var imagebaseURL: String {
+        switch self {
+        case .development:
+            return "https://assets.coingecko.com/coins/images/1/large"
+        }
+    }
 }
 
 public typealias Headers = [String: String]
@@ -33,6 +40,10 @@ public typealias Headers = [String: String]
 // if you wish you can have multiple services like this in a project
 enum AppEndPoints {
     case getCoins
+    
+    case getImage(imagePath: String)
+
+    
     var requestTimeOut: Int {
         return 20
     }
@@ -40,7 +51,7 @@ enum AppEndPoints {
   //specify the type of HTTP request
     var httpMethod: HTTPMethod {
         switch self {
-        case .getCoins:
+        case .getCoins, .getImage(imagePath: )  :
             return .GET
         }
     }
@@ -64,7 +75,11 @@ enum AppEndPoints {
         switch self {
         case .getCoins :
             return "\(baseUrl)/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
+        
+        case .getImage(let imagePath) :
+            return "\(environment.imagebaseURL)/\(imagePath)"
         }
+        
     }
 }
 

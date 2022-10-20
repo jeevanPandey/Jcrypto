@@ -27,7 +27,7 @@ struct HomeView: View {
             .foregroundColor(Color.theme.SecondaryTextColor)
             .padding()
             
-            if(!showPortfolio) {
+           if(!showPortfolio) {
                 List {
                     ForEach(homeViewModel.portfolioCoins) { eachCoin in
                         CoinRowView(coin: eachCoin, showHoldingColumn: true)
@@ -47,7 +47,7 @@ struct HomeView: View {
                 }
                 .listStyle(.plain)
                 .transition(.move(edge: .leading))
-            }
+            } 
            
                
            }

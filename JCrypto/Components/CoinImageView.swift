@@ -10,7 +10,10 @@ import SwiftUI
 struct CoinImageView: View {
     @StateObject var coinImageVM: CoinImageViewModel
     init(imagePath:String) {
-        let vm = CoinImageViewModel(imagePath: imagePath)
+        let fileArray = imagePath.components(separatedBy: "images/")
+       
+        let finalFileName = fileArray.last
+        let vm = CoinImageViewModel(imagePath: finalFileName ?? "")
         _coinImageVM = StateObject(wrappedValue: vm)
     }
     var body: some View {

@@ -30,7 +30,7 @@ extension AppEnvironment {
     var imagebaseURL: String {
         switch self {
         case .development:
-            return "https://assets.coingecko.com/coins/images/1/large"
+            return "https://assets.coingecko.com/coins/images"
         }
     }
 }

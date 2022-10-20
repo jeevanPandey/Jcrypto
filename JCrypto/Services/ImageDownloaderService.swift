@@ -27,6 +27,7 @@ class ImageDownloaderService : ObservableObject {
         cancalableTask = self.downloadImageData().tryMap({ (data) -> UIImage? in
             return UIImage(data: data)
         })
+            .receive(on: RunLoop.main, options: nil)
             .sink(receiveCompletion: { completion in
                 switch completion {
                 case .failure(let error):
@@ -37,12 +38,13 @@ class ImageDownloaderService : ObservableObject {
             }, receiveValue: {[weak self] recieveImage in
                 self?.image = recieveImage
             })
+            
     }
     
     func downloadImageData() -> AnyPublisher<Data, NetworkError> {
         let endPoint = AppEndPoints.getImage(imagePath: self.imaegPath)
         let request = endPoint.createRequest(environment: self.environment)
-        return self.networkRequest.request(request)
+        return self.networkRequest.request(request, enableDecode: false)
     }
 
 }

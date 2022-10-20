@@ -7,20 +7,28 @@
 
 import Foundation
 import Combine
+import UIKit
 
 public protocol Requestable {
     var requestTimeOut: Float { get }
     
-    func request<T: Codable>(_ req: NetworkRequest) -> AnyPublisher<T, NetworkError>
+    func request<T: Codable>(_ req: NetworkRequest,enableDecode:Bool) -> AnyPublisher<T, NetworkError>
 }
 
+/* extension NativeRequestable {
+    
+    func request<T: Codable>(_ req: NetworkRequest,enableDecode:Bool = true) -> AnyPublisher<T, NetworkError> {
+        return request(req, enableDecode: enableDecode)
+    }
+} */
 
 
 public class NativeRequestable: Requestable {
     
+    
     public var requestTimeOut: Float = 30
 
-    public func request<T>(_ req: NetworkRequest) -> AnyPublisher<T, NetworkError>
+    public func request<T>(_ req: NetworkRequest,enableDecode:Bool) -> AnyPublisher<T, NetworkError>
      where T: Decodable, T: Encodable {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = TimeInterval(req.requestTimeOut ?? requestTimeOut)
@@ -31,20 +39,39 @@ public class NativeRequestable: Requestable {
                 Fail<T, NetworkError>(error: NetworkError.badURL("Invalid Url"))
             )
         }
-        // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
-         return URLSession.shared.dataTaskPublisher(for: url)
-            .tryMap { output in
-                     // throw an error if response is nil
-                guard output.response is HTTPURLResponse else {
-                    throw NetworkError.serverError(code: 0, error: "Server error")
+         if (!enableDecode) {
+             debugPrint("url is \(req.url)")
+             return URLSession.shared.dataTaskPublisher(for: url)
+                .tryMap { output in
+                         // throw an error if response is nil
+                    guard output.response is HTTPURLResponse else {
+                        throw NetworkError.serverError(code: 0, error: "Server error")
+                    }
+                    return output.data as! T
                 }
-                return output.data
-            }
-            .decode(type: T.self, decoder: JSONDecoder())
-            .mapError { error in
-                       // return error if json decoding fails
-                NetworkError.invalidJSON(String(describing: error))
-            }
-            .eraseToAnyPublisher()
+                .mapError { error in
+                    NetworkError.invalidJSON(String(describing: error))
+                }
+                .eraseToAnyPublisher()
+             
+         } else {
+             return URLSession.shared.dataTaskPublisher(for: url)
+                .tryMap { output in
+                         // throw an error if response is nil
+                    guard output.response is HTTPURLResponse else {
+                        throw NetworkError.serverError(code: 0, error: "Server error")
+                    }
+                    return output.data
+                }
+                .decode(type: T.self, decoder: JSONDecoder())
+                .mapError { error in
+                           // return error if json decoding fails
+                    NetworkError.invalidJSON(String(describing: error))
+                }
+                .eraseToAnyPublisher()
+         }
+        // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
+        
     }
+    
 }

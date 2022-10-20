@@ -54,7 +54,7 @@ class CoinDownloaderService : ObservableObject {
         let endPoint = AppEndPoints.getCoins
         let request = endPoint.createRequest(environment: self.environment)
         
-        return self.networkRequest.request(request)
+        return self.networkRequest.request(request, enableDecode: true)
     }
     
 }

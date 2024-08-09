@@ -23,10 +23,10 @@ extension AppEnvironment {
     var baseURL: String {
         switch self {
         case .development:
-            return "https://api.coingecko.com/api/v3/coins/"
+            return "https://api.coingecko.com/api/v3"
         }
     }
-    
+    // https://api.coingecko.com/api/v3/global
     var imagebaseURL: String {
         switch self {
         case .development:
@@ -40,18 +40,26 @@ public typealias Headers = [String: String]
 // if you wish you can have multiple services like this in a project
 enum AppEndPoints {
     case getCoins
-    
     case getImage(imagePath: String)
-
-    
+    case getGobalData
     var requestTimeOut: Int {
         return 20
     }
     
+  var path: String {
+    switch self {
+      case .getCoins:
+        return "/coins//markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
+      case .getImage(let imagePath):
+        return imagePath
+      case .getGobalData:
+        return "/global"
+    }
+  }
   //specify the type of HTTP request
     var httpMethod: HTTPMethod {
         switch self {
-        case .getCoins, .getImage(imagePath: )  :
+          case .getCoins, .getImage(imagePath: ), .getGobalData:
             return .GET
         }
     }
@@ -73,15 +81,12 @@ enum AppEndPoints {
     func getURL(from environment: AppEnvironment) -> String {
         let baseUrl = environment.baseURL
         switch self {
-        case .getCoins :
-            return "\(baseUrl)/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
-        
-        case .getImage(let imagePath) :
-            return "\(environment.imagebaseURL)/\(imagePath)"
+          case .getCoins, .getGobalData :
+            return baseUrl + path
+        case .getImage(let _) :
+            return "\(environment.imagebaseURL)/\(path)"
         }
         
     }
 }
-
-
 

@@ -16,20 +16,20 @@ public protocol Requestable {
 }
 
 /* extension NativeRequestable {
-    
-    func request<T: Codable>(_ req: NetworkRequest,enableDecode:Bool = true) -> AnyPublisher<T, NetworkError> {
-        return request(req, enableDecode: enableDecode)
-    }
-} */
+ 
+ func request<T: Codable>(_ req: NetworkRequest,enableDecode:Bool = true) -> AnyPublisher<T, NetworkError> {
+ return request(req, enableDecode: enableDecode)
+ }
+ } */
 
 
 public class NativeRequestable: Requestable {
     
     
     public var requestTimeOut: Float = 30
-
-    public func request<T>(_ req: NetworkRequest,enableDecode:Bool) -> AnyPublisher<T, NetworkError>
-     where T: Decodable, T: Encodable {
+    
+ public func request<T>(_ req: NetworkRequest,enableDecode :Bool) -> AnyPublisher<T, NetworkError>
+    where T: Decodable, T: Encodable {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = TimeInterval(req.requestTimeOut ?? requestTimeOut)
         
@@ -39,11 +39,45 @@ public class NativeRequestable: Requestable {
                 Fail<T, NetworkError>(error: NetworkError.badURL("Invalid Url"))
             )
         }
-         if (!enableDecode) {
-             debugPrint("url is \(req.url)")
-             return URLSession.shared.dataTaskPublisher(for: url)
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .tryMap{ response -> T in
+                guard response.response is HTTPURLResponse else {
+                    throw NetworkError.serverError(code: 0, error: "Server error")
+                }
+                if(!enableDecode) {
+                    return response.data as! T
+                }
+                let decoder = JSONDecoder()
+                do {
+                  let loginResponse = try decoder.decode(T.self, from: response.data)
+                  return loginResponse
+                } catch {
+                  debugPrint("Error is \(error)")
+                  throw NetworkError.serverError(code: 0, error: "Server error")
+                }
+            }
+            .mapError({ error -> NetworkError in
+                NetworkError.serverError(code: 0, error: "Server error")
+            })
+            .eraseToAnyPublisher()
+    }
+    
+ public func request1<T>(_ req: NetworkRequest,enableDecode:Bool) -> AnyPublisher<T, NetworkError>
+        where T: Decodable, T: Encodable {
+        let sessionConfig = URLSessionConfiguration.default
+        sessionConfig.timeoutIntervalForRequest = TimeInterval(req.requestTimeOut ?? requestTimeOut)
+        
+        guard let url = URL(string: req.url) else {
+            // Return a fail publisher if the url is invalid
+            return AnyPublisher(
+                Fail<T, NetworkError>(error: NetworkError.badURL("Invalid Url"))
+            )
+        }
+        if (!enableDecode) {
+            debugPrint("url is \(req.url)")
+            return URLSession.shared.dataTaskPublisher(for: url)
                 .tryMap { output in
-                         // throw an error if response is nil
+                    // throw an error if response is nil
                     guard output.response is HTTPURLResponse else {
                         throw NetworkError.serverError(code: 0, error: "Server error")
                     }
@@ -53,11 +87,11 @@ public class NativeRequestable: Requestable {
                     NetworkError.invalidJSON(String(describing: error))
                 }
                 .eraseToAnyPublisher()
-             
-         } else {
-             return URLSession.shared.dataTaskPublisher(for: url)
+            
+        } else {
+            return URLSession.shared.dataTaskPublisher(for: url)
                 .tryMap { output in
-                         // throw an error if response is nil
+                    // throw an error if response is nil
                     guard output.response is HTTPURLResponse else {
                         throw NetworkError.serverError(code: 0, error: "Server error")
                     }
@@ -65,13 +99,14 @@ public class NativeRequestable: Requestable {
                 }
                 .decode(type: T.self, decoder: JSONDecoder())
                 .mapError { error in
-                           // return error if json decoding fails
+                    // return error if json decoding fails
                     NetworkError.invalidJSON(String(describing: error))
                 }
                 .eraseToAnyPublisher()
-         }
+        }
         // We use the dataTaskPublisher from the URLSession which gives us a publisher to play around with.
         
     }
+    
     
 }

@@ -13,17 +13,29 @@ class ImageDownloaderService : ObservableObject {
     var cancalableTask : AnyCancellable?
     private var networkRequest : Requestable
     private var environment: AppEnvironment = .development
+    private let cache: ImageCacheType
+    private let otherCache =  NSCache<AnyObject, AnyObject>()
+
+
     let imaegPath: String
     @Published var image : UIImage?
     
-    init(networkRequest: Requestable, environment: AppEnvironment,imagePath:String) {
+    init(networkRequest: Requestable, environment: AppEnvironment,imagePath:String,cache: ImageCacheType = ImageCache()) {
         self.networkRequest = networkRequest
         self.environment = environment
         self.imaegPath = imagePath
+        self.cache = cache
         subsribeToImage()
     }
     
     func subsribeToImage() {
+        
+        if let imageFromCache = otherCache.object(forKey: self.imaegPath as AnyObject) as? UIImage{
+                    self.image = imageFromCache
+                    return
+            
+        }
+       
         cancalableTask = self.downloadImageData().tryMap({ (data) -> UIImage? in
             return UIImage(data: data)
         })
@@ -37,6 +49,10 @@ class ImageDownloaderService : ObservableObject {
                 }
             }, receiveValue: {[weak self] recieveImage in
                 self?.image = recieveImage
+                if let pimage = recieveImage, let self = self {
+                    self.otherCache.setObject(pimage, forKey: self.imaegPath as AnyObject)
+                }
+               
             })
             
     }

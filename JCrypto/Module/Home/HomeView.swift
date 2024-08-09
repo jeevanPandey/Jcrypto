@@ -13,44 +13,21 @@ struct HomeView: View {
     @EnvironmentObject var homeViewModel: HomeViewModel
 
     var body: some View {
-        VStack {
+        VStack(spacing: 20) {
             homeHeader
-            HStack {
-                Text("Coin")
-                if(showPortfolio){
-                    Text("Holdings")
-                        .frame(width: UIScreen.main.bounds.width/2.5,  alignment: .trailing)
-                }
-                Spacer()
-                Text("Price")
-            }
-            .foregroundColor(Color.theme.SecondaryTextColor)
-            .padding()
-            
+            HomeStatsView(showPortfolio: $showPortfolio)
+            SearchBarView(searchText: $homeViewModel.searchText)
+            columnView
            if(!showPortfolio) {
-                List {
-                    ForEach(homeViewModel.portfolioCoins) { eachCoin in
-                        CoinRowView(coin: eachCoin, showHoldingColumn: true)
-                    }
-                   
-                }
-                .listStyle(.plain)
+             coinView
                 .transition(.move(edge: .leading))
                // .animation(Animation.easeInOut(duration: 0.0) , value: UUID())
 
             } else {
-                List {
-                    ForEach(homeViewModel.liveCoins) { eachCoin in
-                        CoinRowView(coin: eachCoin, showHoldingColumn: false)
-                    }
-                   
-                }
-                .listStyle(.plain)
+              portfolioView
                 .transition(.move(edge: .leading))
-            } 
-           
-               
-           }
+            }
+        }
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
     }
 }
@@ -76,7 +53,6 @@ extension HomeView {
                     withAnimation(.spring()) {
                         showPortfolio.toggle()
                     }
-                    
                 }
             
         }
@@ -84,14 +60,48 @@ extension HomeView {
     }
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            HomeView()
-                .navigationBarHidden(true)
-                
-        }
-        .environmentObject(dev.homeVM)
-       
+extension HomeView {
+  private var columnView: some View {
+    return  HStack {
+      Text("Coin")
+      if(showPortfolio) {
+        Text("Holdings")
+          .frame(width: UIScreen.main.bounds.width/2.5,  alignment: .trailing)
+      }
+      Spacer()
+      Text("Price")
     }
+    .foregroundColor(Color.theme.SecondaryTextColor)
+    .padding()
+  }
+}
+
+extension HomeView {
+  private var coinView: some View {
+    List {
+      ForEach(homeViewModel.portfolioCoins) { eachCoin in
+        CoinRowView(coin: eachCoin, showHoldingColumn: true)
+      }
+    }
+    .listStyle(.plain)
+  }
+  
+  private var portfolioView: some View {
+    List {
+      ForEach(homeViewModel.liveCoins) { eachCoin in
+        CoinRowView(coin: eachCoin, showHoldingColumn: false)
+      }
+    }
+    .listStyle(.plain)
+  }
+}
+
+struct HomeView_Previews: PreviewProvider {
+  static var previews: some View {
+    NavigationView {
+      HomeView()
+        .navigationBarHidden(true)
+    }
+    .environmentObject(dev.homeVM)
+  }
 }

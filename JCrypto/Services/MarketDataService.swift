@@ -1,38 +1,39 @@
 //
-//  CoinDataDownloader.swift
+//  MarketDataService.swift
 //  JCrypto
 //
-//  Created by Jeevan Pandey on 13/10/22.
+//  Created by Jeevan Pandey on 09/08/24.
 //
+
+import Foundation
 
 import Foundation
 import Combine
 
 
-protocol CoinDataDownloader {
-    func downloadCoinData() -> AnyPublisher<[CoinModel], NetworkError>
+protocol MarketDataServiceDownloader {
+    func downloadMarketData() -> AnyPublisher<GlobalData, NetworkError>
 }
 
 
-class CoinDownloaderService : ObservableObject {
+class MarketDataService : ObservableObject {
     
-    var coinCancalble : AnyCancellable?
+    var cancelable : AnyCancellable?
     private var networkRequest: Requestable
-     private var environment: AppEnvironment = .development
-    @Published var liveCoins = [CoinModel]()
+    private var environment: AppEnvironment = .development
+  @Published var marketData: GlobalData?
 
      
-  
    // inject this for testability
      init(networkRequest: Requestable, environment: AppEnvironment) {
          self.networkRequest = networkRequest
          self.environment = environment
-         subscribeToCoinServices()
+       subscribeToService()
      }
     
-    func subscribeToCoinServices() {
+    func subscribeToService() {
        
-        coinCancalble =  self.downloadCoinData()
+      cancelable =  self.downloadMarketData()
             .sink { (completion) in
                 switch completion {
                 case .failure(let error):
@@ -40,23 +41,21 @@ class CoinDownloaderService : ObservableObject {
                 case .finished:
                     print("nothing much to do here")
                 }
-            } receiveValue: {[weak self ] (allCoins) in
+            } receiveValue: {[weak self ] (allData) in
                 
                 DispatchQueue.main.async {
-                    self?.liveCoins = allCoins
+                  self?.marketData = allData
                 }
                
             }
     }
 
      
-    func downloadCoinData() -> AnyPublisher<[CoinModel], NetworkError> {
-        let endPoint = AppEndPoints.getCoins
+    func downloadMarketData() -> AnyPublisher<GlobalData, NetworkError> {
+        let endPoint = AppEndPoints.getGobalData
         let request = endPoint.createRequest(environment: self.environment)
         
         return self.networkRequest.request(request, enableDecode: true)
     }
     
 }
-
-

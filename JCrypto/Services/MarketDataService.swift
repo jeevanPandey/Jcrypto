@@ -16,12 +16,11 @@ protocol MarketDataServiceDownloader {
 }
 
 
-class MarketDataService : ObservableObject {
-    
+class MarketDataService {
     var cancelable : AnyCancellable?
     private var networkRequest: Requestable
     private var environment: AppEnvironment = .development
-  @Published var marketData: GlobalData?
+    @Published var marketData: GlobalData?
 
      
    // inject this for testability
@@ -32,7 +31,6 @@ class MarketDataService : ObservableObject {
      }
     
     func subscribeToService() {
-       
       cancelable =  self.downloadMarketData()
             .sink { (completion) in
                 switch completion {

@@ -8,7 +8,7 @@
 import Foundation
 
 struct GlobalData: Codable {
-    let date: MarketData
+    let data: MarketData
 }
 
 // MARK: - DateClass
@@ -27,14 +27,14 @@ struct MarketData: Codable {
     guard let item = totalMarketCap.first(where: {$0.key == "usd"}) else {
       return ""
     }
-    return "\(item.value)"
+    return "\(item.value.formattedWithAbbreviations())"
   }
   
   var volume: String {
     guard let item = totalVolume.first(where: {$0.key == "usd"}) else {
       return ""
     }
-    return "\(item.value)"
+    return "\(item.value.formattedWithAbbreviations())"
   }
   
   var btcDominance: String {
@@ -43,6 +43,4 @@ struct MarketData: Codable {
     }
     return item.value.asPercentString()
   }
-
-
 }

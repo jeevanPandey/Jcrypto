@@ -14,11 +14,10 @@ protocol CoinDataDownloader {
 }
 
 
-class CoinDownloaderService : ObservableObject {
-    
+class CoinDownloaderService {
     var coinCancalble : AnyCancellable?
     private var networkRequest: Requestable
-     private var environment: AppEnvironment = .development
+    private var environment: AppEnvironment = .development
     @Published var liveCoins = [CoinModel]()
 
      

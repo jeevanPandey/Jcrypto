@@ -12,11 +12,13 @@ class HomeViewModel : ObservableObject {
     @Published var portfolioCoins = [CoinModel]()
     @Published var liveCoins = [CoinModel]()
     @Published var searchText = ""
-    @Published var allStatsData = [stat1, stat2, stat3, stat4]
+    @Published var allStatsData = [Statistic]()
    
     private var anyCancalbales : AnyCancellable?
+    private var marketCancalble : AnyCancellable?
+
     let coinService : CoinDownloaderService
-  //  let marketDataService : MarketDataService
+    let marketDataService : MarketDataService
 
     
      init() {
@@ -25,25 +27,14 @@ class HomeViewModel : ObservableObject {
              self.liveCoins.append(DeveloperPreview.instance.coin)
          } */
          
-         self.coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
-       //  self.marketDataService = MarketDataService(networkRequest: NativeRequestable(), environment: .development)
+        self.coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
+        self.marketDataService = MarketDataService(networkRequest: NativeRequestable(), environment: .development)
          
-         downloadCoinsData()
+        downloadCoinsData()
+        downloadStatisticsData()
     }
     
     func downloadCoinsData() {
-        
-  /*  anyCancalbales =  self.coinService.$liveCoins.sink { completion in
-                        switch completion {
-                        case .failure(let error):
-                            print("oops got an error \(error.localizedDescription)")
-                        case .finished:
-                            print("nothing much to do here")
-                        }
-                    } receiveValue: { allCoins in
-                        self.liveCoins = allCoins
-                     } */
-      
       anyCancalbales = $searchText
                         .combineLatest(self.coinService.$liveCoins)
                         .debounce(for: .seconds(0.5) , scheduler: DispatchQueue.main)
@@ -66,27 +57,30 @@ class HomeViewModel : ObservableObject {
     }
   }
  
-  /*
   func downloadStatisticsData() {
     
-    anyCancalbales =  self.marketDataService.$marketData.sink { completion in
-      switch completion {
-        case .failure(let error):
-          print("oops got an error \(error.localizedDescription)")
-        case .finished:
-          print("nothing much to do here")
+    marketCancalble = self.marketDataService.$marketData.map{ globalData -> [Statistic] in
+      var stats = [Statistic]()
+      guard let data = globalData?.data else {
+        return stats
       }
-    } receiveValue: { globalData in
-      debugPrint("got the data \(globalData)")
+      let marketCap = Statistic(title: "Market Cap",
+                                value: data.marketCap,
+                                percentageChnage: data.marketCapChangePercentage24HUsd)
+      let volume = Statistic(title: "Volume", value: data.volume)
+      let btcDominanace = Statistic(title: "BTC Dominance", value: data.btcDominance)
+      let portfolio = Statistic(title: "Portfolio", value: "$0.0", percentageChnage: 0)
+      stats.append(contentsOf: [marketCap,
+                                volume,
+                                btcDominanace,
+                                portfolio])
+      return stats
       
     }
-  } */
-
+    .sink { [weak self] stats in
+      self?.allStatsData = stats
+    }
+    
+  }
 }
 
-extension HomeViewModel {
-  static let stat1 = Statistic(title: "Market Cap", value: "$12.5Bn", percentageChnage: 25.34)
-  static let stat2 = Statistic(title: "Total Volume", value: "$1.23Tr")
-  static let stat3 = Statistic(title: "My Value", value: "$98.4k", percentageChnage: 15.85)
-  static let stat4 = Statistic(title: "Portfolio Value", value: "$50.4k", percentageChnage: -12.34)
-}

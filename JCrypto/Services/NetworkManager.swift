@@ -57,7 +57,8 @@ public class NativeRequestable: Requestable {
                 }
             }
             .mapError({ error -> NetworkError in
-                NetworkError.serverError(code: 0, error: "Server error")
+              print("req \(req.url)")
+                return NetworkError.serverError(code: 0, error: "Server error")
             })
             .eraseToAnyPublisher()
     }

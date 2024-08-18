@@ -12,7 +12,7 @@ struct StatisticView: View {
     var body: some View {
       VStack {
         Text(staticData.title)
-          .font(.caption)
+          .font(.headline)
           .foregroundColor(Color.theme.SecondaryTextColor)
           Text(staticData.value)
             .font(.headline)

@@ -22,16 +22,14 @@ class HomeViewModel : ObservableObject {
 
     
      init() {
-        /* DispatchQueue.main.asyncAfter(deadline: .now()+1) {
-             self.portfolioCoins.append(DeveloperPreview.instance.coin)
-             self.liveCoins.append(DeveloperPreview.instance.coin)
-         } */
-         
         self.coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
         self.marketDataService = MarketDataService(networkRequest: NativeRequestable(), environment: .development)
          
         downloadCoinsData()
         downloadStatisticsData()
+       DispatchQueue.main.asyncAfter(deadline: .now()+1) {
+            self.portfolioCoins.append(DeveloperPreview.instance.coin)
+        }
     }
     
     func downloadCoinsData() {
@@ -68,7 +66,7 @@ class HomeViewModel : ObservableObject {
                                 value: data.marketCap,
                                 percentageChnage: data.marketCapChangePercentage24HUsd)
       let volume = Statistic(title: "Volume", value: data.volume)
-      let btcDominanace = Statistic(title: "BTC Dominance", value: data.btcDominance)
+      let btcDominanace = Statistic(title: "BTC\n Dominance", value: data.btcDominance)
       let portfolio = Statistic(title: "Portfolio", value: "$0.0", percentageChnage: 0)
       stats.append(contentsOf: [marketCap,
                                 volume,

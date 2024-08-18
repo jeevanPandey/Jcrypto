@@ -39,6 +39,7 @@
 		DA72578028F6830D00E4AEE6 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA72577C28F6830D00E4AEE6 /* Double.swift */; };
 		DA72578128F6830D00E4AEE6 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA72577D28F6830D00E4AEE6 /* String.swift */; };
 		DA87457E28F7AF0700B5A0AC /* CoinDownloaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87457D28F7AF0700B5A0AC /* CoinDownloaderService.swift */; };
+		DADD4CE72C70D2100086D6F3 /* PortfolioView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADD4CE62C70D2100086D6F3 /* PortfolioView.swift */; };
 		DAEDFA162BCFE5E50066D41D /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEDFA152BCFE5E50066D41D /* SearchBarView.swift */; };
 /* End PBXBuildFile section */
 
@@ -95,6 +96,7 @@
 		DA72577C28F6830D00E4AEE6 /* Double.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		DA72577D28F6830D00E4AEE6 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		DA87457D28F7AF0700B5A0AC /* CoinDownloaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinDownloaderService.swift; sourceTree = "<group>"; };
+		DADD4CE62C70D2100086D6F3 /* PortfolioView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PortfolioView.swift; sourceTree = "<group>"; };
 		DAEDFA152BCFE5E50066D41D /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -217,6 +219,7 @@
 			isa = PBXGroup;
 			children = (
 				DA52EC0B28F56EAB00050014 /* CircleButtonView.swift */,
+				DADD4CE62C70D2100086D6F3 /* PortfolioView.swift */,
 				DA031E202C5F39FB00743C7A /* StatisticView.swift */,
 				DA72577628F6698500E4AEE6 /* CoinRowView.swift */,
 				DAEDFA152BCFE5E50066D41D /* SearchBarView.swift */,
@@ -401,6 +404,7 @@
 			files = (
 				DA3902272900EB390061AC05 /* ImageCache.swift in Sources */,
 				DA031E212C5F39FB00743C7A /* StatisticView.swift in Sources */,
+				DADD4CE72C70D2100086D6F3 /* PortfolioView.swift in Sources */,
 				DA72577728F6698500E4AEE6 /* CoinRowView.swift in Sources */,
 				DA031E252C5F426500743C7A /* HomeStatsView.swift in Sources */,
 				DA52EC0C28F56EAB00050014 /* CircleButtonView.swift in Sources */,

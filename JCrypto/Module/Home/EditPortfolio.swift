@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EditPortfolio: View {
+  @Environment(\.dismiss) var dismiss
   @EnvironmentObject private var vm: HomeViewModel
   @State private var selectedCoin: CoinModel?
   @State private var portfolioAmount = ""
@@ -27,7 +28,7 @@ struct EditPortfolio: View {
       .navigationTitle("My portfolio")
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
-          XmarkButton()
+        XmarkButton(dismiss: _dismiss)
         }
         ToolbarItem(placement: .navigationBarTrailing) {
           Button("Save") {

@@ -19,7 +19,7 @@ struct HomeView: View {
         Color.theme.BackgroundColor
           .ignoresSafeArea()
           .sheet(isPresented: $showPortfolioView) {
-            PortfolioView()
+            EditPortfolio()
           }
         VStack(spacing: 20) {
           homeHeader

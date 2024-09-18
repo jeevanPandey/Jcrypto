@@ -35,10 +35,16 @@ struct EditPortfolio: View {
             debugPrint("Item saved")
             portfolioAmount = ""
             totalPrice = 0
+            dismiss()
           }
           .opacity(totalPrice > 0 ? 1.0 : 0)
         }
         
+      }
+      .onChange(of: vm.searchText) { newValue in
+        if newValue == "" {
+          selectedCoin = nil
+        }
       }
     }
   }

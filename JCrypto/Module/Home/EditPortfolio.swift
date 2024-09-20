@@ -28,11 +28,17 @@ struct EditPortfolio: View {
       .navigationTitle("My portfolio")
       .toolbar {
         ToolbarItem(placement: .navigationBarLeading) {
-        XmarkButton(dismiss: _dismiss)
+          XmarkButton(dismiss: _dismiss)
         }
         ToolbarItem(placement: .navigationBarTrailing) {
           Button("Save") {
             debugPrint("Item saved")
+            guard
+              let selectedCoin = selectedCoin else {
+              dismiss()
+              return
+            }
+            vm.updatePortfolio(coin: selectedCoin, amount: totalPrice)
             portfolioAmount = ""
             totalPrice = 0
             dismiss()
@@ -102,7 +108,7 @@ struct EditPortfolio: View {
     }
     .padding()
   }
-
+  
 }
 
 

@@ -37,6 +37,11 @@ struct HomeView: View {
           }
         }
         .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+        if homeViewModel.isDataLoading {
+          ProgressView()
+            .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+        }
       }
     }
 }

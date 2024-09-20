@@ -13,6 +13,7 @@ class HomeViewModel : ObservableObject {
   @Published var liveCoins = [CoinModel]()
   @Published var searchText = ""
   @Published var allStatsData = [Statistic]()
+  @Published var isDataLoading = false
   
   private var anyCancalbales : AnyCancellable?
   private var marketCancalble : AnyCancellable?
@@ -27,9 +28,16 @@ class HomeViewModel : ObservableObject {
     self.coinService = CoinDownloaderService(networkRequest: NativeRequestable(), environment: .development)
     self.marketDataService = MarketDataService(networkRequest: NativeRequestable(), environment: .development)
     self.portfioLocalCacheService = PortfolioDataService()
-    downloadCoinsData()
-    downloadStatisticsData()
-    getPortfioLocalData()
+    getAllData()
+  }
+  
+  func getAllData() {
+    isDataLoading = true
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+      self.downloadCoinsData()
+      self.downloadStatisticsData()
+      self.getPortfioLocalData()
+    }
   }
   
   func downloadCoinsData() {
@@ -39,6 +47,7 @@ class HomeViewModel : ObservableObject {
       .map(filterCoin)
       .sink {  [weak self] allCoins in
         self?.liveCoins = allCoins
+        self?.isDataLoading = false
       }
     
   }
@@ -56,7 +65,7 @@ class HomeViewModel : ObservableObject {
   }
   
   func downloadStatisticsData() {
-    
+    isDataLoading = true
    marketCancalble = self.marketDataService.$marketData
       .combineLatest($portfolioCoins) { (globalData, portfioData) -> [Statistic] in
       var stats = [Statistic]()
@@ -90,6 +99,7 @@ class HomeViewModel : ObservableObject {
     }
     .sink { [weak self] stats in
       self?.allStatsData = stats
+      self?.isDataLoading = false
     }
   }
   

@@ -18,8 +18,10 @@ struct CircleButtonView: View {
                 Circle()
                     .foregroundColor(Color.theme.BackgroundColor)
             }
-            .shadow(color: Color.theme.AccentColor.opacity(0.3), radius: 10.0,
-                    x: 0, y: 0)
+            .shadow(color: Color.theme.AccentColor.opacity(0.3),
+                    radius: 10.0,
+                    x: 0,
+                    y: 0)
     }
 }
 

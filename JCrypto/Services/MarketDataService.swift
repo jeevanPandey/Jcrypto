@@ -27,7 +27,7 @@ class MarketDataService {
      init(networkRequest: Requestable, environment: AppEnvironment) {
          self.networkRequest = networkRequest
          self.environment = environment
-       subscribeToService()
+         subscribeToService()
      }
     
     func subscribeToService() {

@@ -32,6 +32,7 @@ public class NativeRequestable: Requestable {
     where T: Decodable, T: Encodable {
         let sessionConfig = URLSessionConfiguration.default
         sessionConfig.timeoutIntervalForRequest = TimeInterval(req.requestTimeOut ?? requestTimeOut)
+        debugPrint("URL is \(req.url)")
         
         guard let url = URL(string: req.url) else {
             // Return a fail publisher if the url is invalid
@@ -52,8 +53,9 @@ public class NativeRequestable: Requestable {
                   let loginResponse = try decoder.decode(T.self, from: response.data)
                   return loginResponse
                 } catch {
-                  debugPrint("Error is \(error)")
-                  throw NetworkError.serverError(code: 0, error: "Server error")
+                  
+                  debugPrint("Error occured: \(error.localizedDescription) for URL: \(req.url) ")
+                  throw NetworkError.serverError(code: 0, error: error.localizedDescription)
                 }
             }
             .mapError({ error -> NetworkError in

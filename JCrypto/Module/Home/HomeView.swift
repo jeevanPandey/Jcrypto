@@ -8,47 +8,55 @@
 import SwiftUI
 
 struct HomeView: View {
-    
-    @State private var showPortfolio = false
-    @State private var showPortfolioView = false
-
-    @EnvironmentObject var homeViewModel: HomeViewModel
-
-    var body: some View {
-      ZStack {
-        Color.theme.BackgroundColor
-          .ignoresSafeArea()
-          .sheet(isPresented: $showPortfolioView) {
-            EditPortfolio()
-          }
-        VStack(spacing: 20) {
-          homeHeader
-          HomeStatsView(showPortfolio: $showPortfolio)
-          SearchBarView(searchText: $homeViewModel.searchText)
-          columnView
-          if(!showPortfolio) {
-            coinView
-              .transition(.move(edge: .leading))
-            // .animation(Animation.easeInOut(duration: 0.0) , value: UUID())
-            
-          } else {
-            portfolioView
-              .transition(.move(edge: .leading))
-          }
+  
+  @State private var showPortfolio = false
+  @State private var showPortfolioView = false
+  @State private var showDetail = false
+  @State private var selecetedCoin: CoinModel? = nil
+  
+  @EnvironmentObject var homeViewModel: HomeViewModel
+  
+  var body: some View {
+    ZStack {
+      Color.theme.BackgroundColor
+        .ignoresSafeArea()
+        .sheet(isPresented: $showPortfolioView) {
+          EditPortfolio()
         }
-        .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
-        if homeViewModel.isDataLoading {
-          ProgressView()
-            .progressViewStyle(CircularProgressViewStyle(tint: .gray))
-            .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+      VStack(spacing: 20) {
+        homeHeader
+        HomeStatsView(showPortfolio: $showPortfolio)
+        SearchBarView(searchText: $homeViewModel.searchText)
+        columnView
+        if(!showPortfolio) {
+          coinView
+            .transition(.move(edge: .leading))
+          // .animation(Animation.easeInOut(duration: 0.0) , value: UUID())
+          
+        } else {
+          portfolioView
+            .transition(.move(edge: .leading))
         }
       }
+      .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .top)
+      if homeViewModel.isDataLoading {
+        ProgressView()
+          .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+          .frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity)
+      }
     }
+    .background(
+      NavigationLink(destination: DetailLoadingView(coin: $selecetedCoin), isActive: $showDetail, label: {
+        EmptyView()
+      })
+      
+    )
+  }
 }
 
 
 extension HomeView {
-    
+  
   private var homeHeader: some View {
     return  HStack {
       CircleButtonView(iconName: showPortfolio ? "plus" : "info")
@@ -130,6 +138,9 @@ extension HomeView {
     List {
       ForEach(homeViewModel.liveCoins) { eachCoin in
         CoinRowView(coin: eachCoin, showHoldingColumn: false)
+          .onTapGesture {
+            segue(coin: eachCoin)
+          }
       }
     }
     .listStyle(.plain)
@@ -142,12 +153,20 @@ extension HomeView {
     List {
       ForEach(homeViewModel.portfolioCoins) { eachCoin in
         CoinRowView(coin: eachCoin, showHoldingColumn: true)
+          .onTapGesture {
+            segue(coin: eachCoin)
+          }
       }
     }
     .listStyle(.plain)
     .refreshable {
       homeViewModel.refreshCoinsData()
     }
+  }
+  
+  private func segue(coin: CoinModel) {
+    selecetedCoin = coin
+    showDetail.toggle()
   }
 }
 
@@ -163,8 +182,8 @@ struct HomeView_Previews: PreviewProvider {
 
 
 extension View {
-    func printOutput(_ value: Any) -> Self {
-        print(value)
-        return self
-    }
+  func printOutput(_ value: Any) -> Self {
+    print(value)
+    return self
+  }
 }

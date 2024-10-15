@@ -42,6 +42,7 @@ enum AppEndPoints {
     case getCoins
     case getImage(imagePath: String)
     case getGobalData
+    case getCoinDeati(coinID: String)
     var requestTimeOut: Int {
         return 20
     }
@@ -49,17 +50,19 @@ enum AppEndPoints {
   var path: String {
     switch self {
       case .getCoins:
-        return "/coins//markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
+        return "/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=250&page=1&sparkline=true&price_change_percentage=24h"
       case .getImage(let imagePath):
         return imagePath
       case .getGobalData:
         return "/global"
+      case .getCoinDeati(let coinID):
+       return "/coins/\(coinID)?localization=false&tickers=false&market_data=false&community_data=false&developer_data=false&sparkline=false"
     }
   }
   //specify the type of HTTP request
     var httpMethod: HTTPMethod {
         switch self {
-          case .getCoins, .getImage(imagePath: ), .getGobalData:
+          case .getCoins, .getImage(_), .getGobalData, .getCoinDeati(_):
             return .GET
         }
     }
@@ -83,10 +86,11 @@ enum AppEndPoints {
         switch self {
           case .getCoins, .getGobalData :
             return baseUrl + path
-        case .getImage(let _) :
+        case .getImage(_) :
             return "\(environment.imagebaseURL)/\(path)"
+          case .getCoinDeati(_):
+            return baseUrl + path
         }
         
     }
 }
-

@@ -14,7 +14,7 @@ protocol CoinDataDownloader {
 }
 
 
-class CoinDownloaderService {
+class CoinDownloaderService: CoinDataDownloader {
     var cancellables = Set<AnyCancellable>()
     private var networkRequest: Requestable
     private var environment: AppEnvironment = .development

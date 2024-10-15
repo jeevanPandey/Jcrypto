@@ -35,24 +35,31 @@ struct Detailview: View {
   }
   var body: some View {
     ScrollView {
-      VStack(spacing: 20) {
-        Text("")
-        
-        getViewFor(text: "Overview")
-        Divider()
-        getGridViewFor(stats: detailViewModel.overviewStatistics)
-        
-        Divider()
-        getViewFor(text: "Additional Details")
-        getGridViewFor(stats: detailViewModel.additionalStatistics)
+      VStack {
+        ChartView(coin: detailViewModel.coinModel)
+          .padding(.vertical)
+        VStack(spacing: 20) {
+          getViewFor(text: "Overview")
+          Divider()
+          getGridViewFor(stats: detailViewModel.overviewStatistics)
+          
+          Divider()
+          getViewFor(text: "Additional Details")
+          getGridViewFor(stats: detailViewModel.additionalStatistics)
+        }
       }
       .padding()
     }
     .navigationTitle(self.detailViewModel.coinModel.name)
+    .toolbar {
+      ToolbarItem(placement: .navigationBarTrailing) {
+        coinRightIcon
+      }
+    }
   }
   
   private func getViewFor(text: String) -> some View {
-    return Text(text)
+            Text(text)
               .font(.headline)
               .bold()
               .foregroundColor(Color.theme.AccentColor)
@@ -60,10 +67,25 @@ struct Detailview: View {
   }
   
   private func getGridViewFor(stats: [Statistic]) -> some View {
-    return LazyVGrid(columns: gridItems, alignment: .leading, spacing: 10) {
-      ForEach(detailViewModel.additionalStatistics) {  stats in
+     LazyVGrid(columns: gridItems,
+                     alignment: .leading, spacing: 30) {
+      ForEach(stats) { stats in
         StatisticView(staticData: stats)
       }
+    }
+  }
+  
+}
+
+
+extension Detailview {
+  private var coinRightIcon: some View {
+    HStack {
+      Text(detailViewModel.coinModel.name)
+        .font(.callout)
+        .foregroundColor(Color.theme.SecondaryTextColor)
+      CoinImageView(imagePath: detailViewModel.coinModel.image)
+        .frame(width: 25, height: 25)
     }
   }
 }

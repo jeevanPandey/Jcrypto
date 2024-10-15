@@ -32,9 +32,8 @@ class CoinDetailDownloaderService: CoinDetailDataiDownloader {
   func subscribeToCoinServices() {
     cancelable = self.downloadCoinDetailData()
       .sink(receiveCompletion: { error in
-        debugPrint("Error \(error)")
+      //  debugPrint("Error \(error)")
       }, receiveValue: { coinDetail in
-        debugPrint("Found Detail \(coinDetail)")
         self.coinData = coinDetail
       })
   }

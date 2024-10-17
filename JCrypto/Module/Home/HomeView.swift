@@ -13,6 +13,7 @@ struct HomeView: View {
   @State private var showPortfolioView = false
   @State private var showDetail = false
   @State private var selecetedCoin: CoinModel? = nil
+  @State private var showSettingView = false
   
   @EnvironmentObject var homeViewModel: HomeViewModel
   
@@ -51,6 +52,9 @@ struct HomeView: View {
       })
       
     )
+    .sheet(isPresented: $showSettingView) {
+      SettingScreen()
+    }
   }
 }
 
@@ -63,6 +67,8 @@ extension HomeView {
         .onTapGesture {
           if showPortfolio {
             showPortfolioView.toggle()
+          } else {
+            showSettingView.toggle()
           }
         }
         .animation(nil, value:  UUID())

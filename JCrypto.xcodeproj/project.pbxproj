@@ -47,6 +47,7 @@
 		DA87457E28F7AF0700B5A0AC /* CoinDownloaderService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA87457D28F7AF0700B5A0AC /* CoinDownloaderService.swift */; };
 		DA9063532C9D137500C2E305 /* PortfolioContainer.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = DA9063512C9D137500C2E305 /* PortfolioContainer.xcdatamodeld */; };
 		DAB13C972CBEA55300EE2143 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB13C962CBEA55300EE2143 /* ChartView.swift */; };
+		DACFED5B2CC0AB7700058098 /* SettingScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACFED5A2CC0AB7700058098 /* SettingScreen.swift */; };
 		DADD4CE72C70D2100086D6F3 /* EditPortfolio.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADD4CE62C70D2100086D6F3 /* EditPortfolio.swift */; };
 		DAEDFA162BCFE5E50066D41D /* SearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEDFA152BCFE5E50066D41D /* SearchBarView.swift */; };
 		DAF75AF12C783721009AC0A8 /* CoinLogo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF75AF02C783721009AC0A8 /* CoinLogo.swift */; };
@@ -113,6 +114,7 @@
 		DA87457D28F7AF0700B5A0AC /* CoinDownloaderService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinDownloaderService.swift; sourceTree = "<group>"; };
 		DA9063522C9D137500C2E305 /* PortfilioContainer.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = PortfilioContainer.xcdatamodel; sourceTree = "<group>"; };
 		DAB13C962CBEA55300EE2143 /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		DACFED5A2CC0AB7700058098 /* SettingScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingScreen.swift; sourceTree = "<group>"; };
 		DADD4CE62C70D2100086D6F3 /* EditPortfolio.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditPortfolio.swift; sourceTree = "<group>"; };
 		DAEDFA152BCFE5E50066D41D /* SearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarView.swift; sourceTree = "<group>"; };
 		DAF75AF02C783721009AC0A8 /* CoinLogo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinLogo.swift; sourceTree = "<group>"; };
@@ -240,6 +242,7 @@
 				DA52EC0328F56DC300050014 /* Home */,
 				DA2054452CBA22A400263724 /* Detail */,
 				DA72577528F664C800E4AEE6 /* Container */,
+				DACFED592CC0AB4000058098 /* SettingScreen */,
 			);
 			path = Module;
 			sourceTree = "<group>";
@@ -305,6 +308,14 @@
 				DA29269A28F8034F007AF26A /* AppEndPoints.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		DACFED592CC0AB4000058098 /* SettingScreen */ = {
+			isa = PBXGroup;
+			children = (
+				DACFED5A2CC0AB7700058098 /* SettingScreen.swift */,
+			);
+			path = SettingScreen;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -470,6 +481,7 @@
 				DA5F541C28FBF39400E0B966 /* CoinImageViewModel.swift in Sources */,
 				DA52EC0E28F5995B00050014 /* CircleanimationView.swift in Sources */,
 				DA3E5E0E2C9A7FCA00146470 /* PortfolioDataService.swift in Sources */,
+				DACFED5B2CC0AB7700058098 /* SettingScreen.swift in Sources */,
 				DA2054472CBA230700263724 /* Detailview.swift in Sources */,
 				DAF75AF12C783721009AC0A8 /* CoinLogo.swift in Sources */,
 				DA29269B28F8034F007AF26A /* AppEndPoints.swift in Sources */,
